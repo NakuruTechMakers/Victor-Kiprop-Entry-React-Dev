@@ -219,42 +219,6 @@ class Cart extends Component {
           </Query>
         </CartContainer>
 
-        <CartContainer>
-          <Query query={GET_SINGLE_PRODUCT}>
-            {({ loading, error, data }) => {
-              if (loading) return <h1>Loading</h1>;
-              if (error) return <h2>Error</h2>;
-
-              return (
-                <Container>
-                  <LeftContainer>
-                    <Brand>{data.product.brand}</Brand>
-                    <Name>{data.product.name}</Name>
-                    <Price>
-                      {data.product.prices[0].currency.symbol}
-                      {data.product.prices[0].amount}
-                    </Price>
-                    <Sizes>SIZE:</Sizes>
-                    <Color>COLOR:</Color>
-                  </LeftContainer>
-                  <RightContainer>
-                    <CountContainer>
-                      <Increment>+</Increment>
-                      <Count>2</Count>
-                      <Decrement>-</Decrement>
-                    </CountContainer>
-                    <ImageContainer>
-                      <ImageContent src={data.product.gallery[0]} alt="cart" />
-                      <LeftArrow />
-                      <RightArrow />
-                    </ImageContainer>
-                  </RightContainer>
-                </Container>
-              );
-            }}
-          </Query>
-        </CartContainer>
-
         <CartOrderComponent />
       </CartWrapper>
     );

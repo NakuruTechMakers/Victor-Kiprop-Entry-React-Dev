@@ -21,6 +21,7 @@ import { apolloClient } from "./index";
 //BRINGING IN STATE
 import { connect } from "react-redux";
 import { fetchProducts } from "./redux/shopping/shopping-actions";
+import { fetchfilteredProducts } from "./redux/shopping/shopping-actions";
 
 // OUR QUERY
 const GET_PRODUCTS = gql`
@@ -59,11 +60,16 @@ const GET_PRODUCTS = gql`
 // sort this later
 const Wrap = styled.div``;
 const Container = styled.div`
-  max-width: 1440px;
+  max-width: 1100px;
   margin: auto;
 `;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   componentDidMount = async () => {
     const { fetchProducts } = this.props;
 
@@ -77,7 +83,23 @@ class App extends Component {
     }
 
     fetchProducts(res.data);
+    this.filterAllResults(res.data);
   };
+
+  filterAllResults(data) {
+    const clothes = data.categories?.slice(0, 1).map((item, index) => {
+      return item.products?.filter((product) => {
+        return product.category === "clothes";
+      });
+    });
+    const tech = data.categories?.slice(0, 1).map((item, index) => {
+      return item.products?.filter((product) => {
+        return product.category === "tech";
+      });
+    });
+    const children = clothes[0].concat(tech[0]);
+    this.props.fetchfilteredProducts(children);
+  }
 
   render() {
     const { currentItem, cartOverlayOpen } = this.props;
@@ -134,6 +156,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProducts: (data) => dispatch(fetchProducts(data)),
+    fetchfilteredProducts: (someProducts) =>
+      dispatch(fetchfilteredProducts(someProducts)),
   };
 };
 

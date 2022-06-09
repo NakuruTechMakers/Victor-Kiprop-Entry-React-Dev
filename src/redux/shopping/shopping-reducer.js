@@ -2,6 +2,7 @@ import * as actionTypes from "./shopping-types";
 
 const INITIAL_STATE = {
   data: {},
+  filteredProducts: [],
   cart: [], //main img, small images,id,title,name,size,color,price,desc,img,qty
   currentItem: null,
   cartOverlayOpen: false,
@@ -15,6 +16,12 @@ const shopReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         data: action.payload,
+      };
+
+    case actionTypes.FETCH_FILTERED_PRODUCTS:
+      return {
+        ...state,
+        filteredProducts: action.payload,
       };
 
     case actionTypes.ADD_TO_CART:

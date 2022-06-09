@@ -80,14 +80,37 @@ const Price = styled.p`
 
 class Product extends Component {
   render() {
-    const { data, loadCurrentItem } = this.props;
+    const { data, loadCurrentItem, filteredProducts } = this.props;
 
     return (
       <ContainerWrapper>
         <h2>product</h2>
-        {data.categories?.slice(0, 1).map((item, index) => (
+        <Container>
+          {filteredProducts?.map((product) => {
+            return (
+              <Link
+                to={`/product/${product.id}`}
+                key={product.id}
+                onClick={() => loadCurrentItem(product)}
+                style={{ textDecoration: "none" }}
+              >
+                <ProductWrapper>
+                  <ProductImage src={product.gallery[0]} alt={product.name} />
+                  <ProductName>{product.name}</ProductName>
+                  <Price>
+                    {product.prices[0].currency.symbol}{" "}
+                    {product.prices[0].amount}
+                  </Price>
+                  <CartIcon />
+                </ProductWrapper>
+              </Link>
+            );
+          })}
+        </Container>
+
+        {/* {filteredProducts?.map((item, index) => (
           <Container key={index}>
-            {item.products?.map((product) => {
+            {item?.map((product) => {
               return (
                 <Link
                   to={`/product/${product.id}`}
@@ -108,7 +131,7 @@ class Product extends Component {
               );
             })}
           </Container>
-        ))}
+        ))} */}
       </ContainerWrapper>
     );
   }
@@ -117,6 +140,7 @@ class Product extends Component {
 const mapStateToProps = (state) => {
   return {
     data: state.shop.data,
+    filteredProducts: state.shop.filteredProducts,
   };
 };
 

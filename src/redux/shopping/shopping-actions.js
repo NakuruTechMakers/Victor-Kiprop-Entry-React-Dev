@@ -1,10 +1,16 @@
 import * as actionTypes from "./shopping-types";
 
-
 export const fetchProducts = (products) => {
   return {
     type: actionTypes.FETCH_PRODUCTS,
     payload: products,
+  };
+};
+
+export const fetchfilteredProducts = (filteredProducts) => {
+  return {
+    type: actionTypes.FETCH_FILTERED_PRODUCTS,
+    payload: filteredProducts,
   };
 };
 

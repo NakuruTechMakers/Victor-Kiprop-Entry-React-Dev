@@ -8,10 +8,11 @@ import { Link } from "react-router-dom";
 //BRINGING IN STATE
 import { connect } from "react-redux";
 import { toggleCartOverlay } from "../redux/shopping/shopping-actions";
+import { fetchfilteredProducts } from "../redux/shopping/shopping-actions";
 
 // Styled  styles
 const Container = styled.div`
-  max-width: 1440px;
+  max-width: 1100px;
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -62,6 +63,7 @@ class Nav extends Component {
     super(props);
 
     this.state = {
+      filteredData: [],
       cartCount: 0,
       data: { currencies: [] },
       loading: false,
@@ -99,18 +101,53 @@ class Nav extends Component {
   handleToggleCart() {
     this.props.toggleCartOverlay();
   }
+  // FILTER PRODUCTS BY CATEGORY
+  filterResults = (categoryItem) => {
+    const filteredProduct = this.props.data.categories
+      ?.slice(0, 1)
+      .map((item, index) => {
+        return item.products?.filter((product) => {
+          return product.category === categoryItem;
+        });
+      });
+    console.log(filteredProduct);
+    this.props.fetchfilteredProducts(filteredProduct[0]);
+  };
+
+  filterAllResults = () => {
+    const clothes = this.props.data.categories
+      ?.slice(0, 1)
+      .map((item, index) => {
+        return item.products?.filter((product) => {
+          return product.category === "clothes";
+        });
+      });
+    const tech = this.props.data.categories?.slice(0, 1).map((item, index) => {
+      return item.products?.filter((product) => {
+        return product.category === "tech";
+      });
+    });
+    const children = clothes[0].concat(tech[0]);
+    this.props.fetchfilteredProducts(children);
+  };
 
   render() {
     return (
       <Container>
         <LinkItems>
           <LinkItem>
-            <Link to="/">All</Link>
+            <Link to="/" onClick={() => this.filterAllResults()}>
+              All
+            </Link>
           </LinkItem>
-          <LinkItem>Tech</LinkItem>
-          <LinkItem>Clothes</LinkItem>
+          <LinkItem onClick={() => this.filterResults("tech")}>
+            <Link to="/">Tech</Link>
+          </LinkItem>
+          <LinkItem onClick={() => this.filterResults("clothes")}>
+            <Link to="/">Clothes</Link>
+          </LinkItem>
         </LinkItems>
-        <LogoContainer to="/">
+        <LogoContainer to="/" onClick={() => this.filterAllResults()}>
           <img src={Logo} alt="Ecommerce Logo" />
         </LogoContainer>
 
@@ -133,11 +170,15 @@ const mapStateToProps = (state) => {
   return {
     cartOverlayOpen: state.shop.cartOverlayOpen,
     cart: state.shop.cart,
+    data: state.shop.data,
+    filteredProducts: state.shop.filteredProducts,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleCartOverlay: () => dispatch(toggleCartOverlay()),
+    fetchfilteredProducts: (someProducts) =>
+      dispatch(fetchfilteredProducts(someProducts)),
   };
 };
 

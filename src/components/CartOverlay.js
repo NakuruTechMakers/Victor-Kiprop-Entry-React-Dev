@@ -6,16 +6,26 @@ import CartTotals from "./CartTotals";
 
 const Container = styled.div`
   width: 400px;
-  margin-left: auto;
   padding: 10px;
+  margin-top: 20px;
   border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  position: absolute;
+  right: 0;
+  z-index: 99;
+`;
+const Title = styled.h1`
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 26px;
+  color: #1d1f22;
 `;
 
 class CartOverlay extends Component {
   render() {
     return (
       <Container>
-        <h3>My Bag: 3 items</h3>
+        <Title>My Bag: 3 items</Title>
         <CartOverlayItems />
         <CartOverlayItems />
         <CartTotals />

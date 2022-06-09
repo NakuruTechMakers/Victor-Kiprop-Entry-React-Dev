@@ -1,7 +1,10 @@
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
 }
 body {
   margin: 0;
+  margin:auto;
+  position:relative;
 }

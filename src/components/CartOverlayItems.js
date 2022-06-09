@@ -49,14 +49,26 @@ const LeftContainer = styled.div`
   background: #f4f4f4;
 `;
 const Brand = styled.p`
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 7px 0px;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 26px;
+  color: #1d1f22;
 `;
 const Name = styled(Brand)``;
-const Sizes = styled.div``;
-const Color = styled.div``;
+const Sizes = styled.div`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: #1d1f22;
+`;
+const Color = styled(Sizes)``;
 const Price = styled.div`
   margin: 5px 0px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 26px;
+  color: #1d1f22;
 `;
 
 const RightContainer = styled.div`
@@ -108,8 +120,8 @@ class CartOverlay extends Component {
                     {data.product.prices[0].currency.symbol}
                     {data.product.prices[0].amount}
                   </Price>
-                  <Sizes>Size</Sizes>
-                  <Color>Color</Color>
+                  <Sizes>Size:</Sizes>
+                  <Color>Color:</Color>
                 </LeftContainer>
                 <RightContainer>
                   <CountContainer>

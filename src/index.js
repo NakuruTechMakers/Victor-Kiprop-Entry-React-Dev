@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-// Adding store
+// Store
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
@@ -11,7 +11,7 @@ import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
-// Create Apollo Client
+// Apollo Client
 export const apolloClient = new ApolloClient({
   uri: "http://localhost:4000",
   cache: new InMemoryCache(),
@@ -27,15 +27,3 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
-
-// const Root = () => (
-//     <ApolloProvider client={apolloClient}>
-//       <Provider store={store}>
-//       <App />
-//       </Provider>
-//     </ApolloProvider>
-// );
-// ReactDOM.render(<Root />, document.getElementById('root'))
-// if (module.hot) {
-//   module.hot.accept()
-// }

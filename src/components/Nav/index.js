@@ -1,69 +1,29 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import Logo from "../Logo.png";
-import CartOverlay from "./CartOverlay";
-import { BsCart2 } from "react-icons/bs";
+import Logo from "../../Logo.png";
+import CartOverlay from "../CartOverlay";
 import { Link } from "react-router-dom";
+import {
+  Container,
+  LinkItems,
+  LinkItem,
+  LogoContainer,
+  CartWrapper,
+  CurrencySymbol,
+  CartIcon,
+  BasketWrapper,
+  BasketIcon,
+} from "./NavStyles";
 
 //BRINGING IN STATE
 import { connect } from "react-redux";
-import { toggleCartOverlay } from "../redux/shopping/shopping-actions";
-import { fetchfilteredProducts } from "../redux/shopping/shopping-actions";
-
-// Styled  styles
-const Container = styled.div`
-  max-width: 1100px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 0px 10px;
-  position: relative;
-`;
-const LinkItems = styled.div`
-  display: flex;
-  align-items: center;
-`;
-const LinkItem = styled.div`
-  margin-right: 15px;
-`;
-const LogoContainer = styled(Link)``;
-const CartWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
-const CurrencySymbol = styled.div`
-  margin-right: 15px;
-`;
-const CartIcon = styled.div`
-  position: relative;
-  cursor: pointer;
-  span {
-    display: inline-block;
-    background: #000;
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    color: #fff;
-    padding: 3px;
-    text-align: center;
-    position: absolute;
-    top: -10px;
-    right: -10px;
-  }
-`;
-const BasketWrapper = styled.div``;
-const BasketIcon = styled(BsCart2)`
-  font-size: 20px;
-  color: #000;
-`;
+import { toggleCartOverlay } from "../../redux/shopping/shopping-actions";
+import { fetchfilteredProducts } from "../../redux/shopping/shopping-actions";
 
 class Nav extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      filteredData: [],
       cartCount: 0,
       data: { currencies: [] },
       loading: false,
@@ -73,7 +33,6 @@ class Nav extends Component {
     this.handleToggleCart = this.handleToggleCart.bind(this);
     this.handleCount = this.handleCount.bind(this);
   }
-  ////////////////////////////////////////////////////////////Start here - 46th minute on React state management with redux
 
   handleCount() {
     let count = 0;
@@ -92,7 +51,10 @@ class Nav extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.cart !== prevProps.cart) {
+    if (
+      this.props.cart !== prevProps.cart ||
+      this.state.cartCount !== prevState.cartCount
+    ) {
       this.handleCount();
     }
   }
@@ -101,6 +63,7 @@ class Nav extends Component {
   handleToggleCart() {
     this.props.toggleCartOverlay();
   }
+
   // FILTER PRODUCTS BY CATEGORY
   filterResults = (categoryItem) => {
     const filteredProduct = this.props.data.categories
@@ -110,7 +73,6 @@ class Nav extends Component {
           return product.category === categoryItem;
         });
       });
-    console.log(filteredProduct);
     this.props.fetchfilteredProducts(filteredProduct[0]);
   };
 
@@ -174,6 +136,7 @@ const mapStateToProps = (state) => {
     filteredProducts: state.shop.filteredProducts,
   };
 };
+
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleCartOverlay: () => dispatch(toggleCartOverlay()),

@@ -57,11 +57,10 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-// sort this later
-const Wrap = styled.div``;
 const Container = styled.div`
-  max-width: 1100px;
+  max-width: 1400px;
   margin: auto;
+  padding:0px 20px;
 `;
 
 class App extends Component {
@@ -102,44 +101,29 @@ class App extends Component {
   }
 
   render() {
-    const { currentItem, cartOverlayOpen } = this.props;
+    const { currentItem } = this.props;
     return (
       <Router>
         <div className="App">
-          <>
-            <Nav />
-            <Wrap
-              style={
-                cartOverlayOpen
-                  ? {
-                      width: "100%",
-                      height: "100%",
-                      background: "rgba(0, 0, 0, 0.2)",
-                      zIndex: 50,
-                    }
-                  : { background: "transparent" }
-              }
-            >
-              <Container>
-                <Routes>
-                  <Route exact path="/" element={<ProductsList />} />
-                  <Route exact path="/cart" element={<Cart />} />
-                  {/* <Route exact path="/cart-overlay" element={<CartOverlay />} /> */}
-                  {/* {!currentItem ? (
+          <Nav />
+          <Container>
+            <Routes>
+              <Route exact path="/" element={<ProductsList />} />
+              <Route exact path="/cart" element={<Cart />} />
+              {/* <Route exact path="/cart-overlay" element={<CartOverlay />} /> */}
+              {/* {!currentItem ? (
                 <Redirect to="/" />
               ) : (
                 <Route exact path="/product/:id" element={<PDP />} />
               )} */}
 
-                  {!currentItem ? (
-                    <Route exact path="/" element={<Navigate to="/" />} />
-                  ) : (
-                    <Route path="/product/:id" element={<PDP />} />
-                  )}
-                </Routes>
-              </Container>
-            </Wrap>
-          </>
+              {!currentItem ? (
+                <Route exact path="/" element={<Navigate to="/" replace />} />
+              ) : (
+                <Route path="/product/:id" element={<PDP />} />
+              )}
+            </Routes>
+          </Container>
         </div>
       </Router>
     );
@@ -149,7 +133,6 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     currentItem: state.shop.currentItem,
-    cartOverlayOpen: state.shop.cartOverlayOpen,
   };
 };
 

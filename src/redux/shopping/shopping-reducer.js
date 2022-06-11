@@ -3,11 +3,10 @@ import * as actionTypes from "./shopping-types";
 const INITIAL_STATE = {
   data: {},
   filteredProducts: [],
-  cart: [], //main img, small images,id,title,name,size,color,price,desc,img,qty
+  cart: [],
   currentItem: null,
   cartOverlayOpen: false,
-  error: "",
-  // loading: false,
+  currencyData: {},
 };
 
 const shopReducer = (state = INITIAL_STATE, action) => {
@@ -22,6 +21,12 @@ const shopReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         filteredProducts: action.payload,
+      };
+
+    case actionTypes.FETCH_CURRENCIES:
+      return {
+        ...state,
+        currencyData: action.payload,
       };
 
     case actionTypes.ADD_TO_CART:
@@ -50,7 +55,7 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         cart: state.cart.filter((item) => item.id !== action.payload.id),
       };
 
-    case actionTypes.ADJUST_QTY:
+    case actionTypes.INCREMENT_QTY:
       return {
         ...state,
         cart: state.cart.map((item) =>
@@ -60,23 +65,28 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         ),
       };
 
-    case actionTypes.LOAD_CURRENT_ITEM:
+    case actionTypes.DECREMENT_QTY:
       return {
         ...state,
-        currentItem: action.payload,
+        cart: state.cart.map((item) =>
+          item.id === action.payload.id
+            ? { ...item, qty: +action.payload.qty }
+            : item
+        ),
       };
-    ////////////////////////////////////////////////////////////////////////////
-    // CART OVERLAY SECTION
+
     case actionTypes.TOGGLE_CART_OVERLAY:
       return {
         ...state,
         cartOverlayOpen: !state.cartOverlayOpen,
       };
-    case actionTypes.CLOSE_CART_OVERLAY:
+
+    case actionTypes.LOAD_CURRENT_ITEM:
       return {
         ...state,
-        cartOverlayOpen: false,
+        currentItem: action.payload,
       };
+
     default:
       return state;
   }

@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
+import "../../App.css";
 import Logo from "../../Logo.png";
 import CartOverlay from "../CartOverlay";
-import { Link } from "react-router-dom";
 import {
   Container,
   LinkItems,
@@ -9,31 +9,60 @@ import {
   LogoContainer,
   CartWrapper,
   CurrencySymbol,
+  Select,
   CartIcon,
   BasketWrapper,
   BasketIcon,
 } from "./NavStyles";
 
-//BRINGING IN STATE
 import { connect } from "react-redux";
-import { toggleCartOverlay } from "../../redux/shopping/shopping-actions";
-import { fetchfilteredProducts } from "../../redux/shopping/shopping-actions";
+import {
+  toggleCartOverlay,
+  fetchfilteredProducts,
+  fetchCurrencies,
+} from "../../redux/shopping/shopping-actions";
 
-class Nav extends Component {
+// Query
+import gql from "graphql-tag";
+import { apolloClient } from "../../index";
+
+const GET_CURRENCIES = gql`
+  query {
+    currencies {
+      label
+      symbol
+    }
+  }
+`;
+
+class Nav extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       cartCount: 0,
-      data: { currencies: [] },
-      loading: false,
-      error: "",
     };
 
     this.handleToggleCart = this.handleToggleCart.bind(this);
     this.handleCount = this.handleCount.bind(this);
   }
 
+  componentDidMount = async () => {
+    const { fetchCurrencies } = this.props;
+
+    let res;
+    try {
+      res = await apolloClient.query({
+        query: GET_CURRENCIES,
+      });
+      this.handleCount();
+    } catch (error) {
+      console.log(error);
+    }
+    fetchCurrencies(res.data);
+  };
+
+  //UPDATING QTY
   handleCount() {
     let count = 0;
 
@@ -46,10 +75,6 @@ class Nav extends Component {
     });
   }
 
-  componentDidMount() {
-    this.handleCount();
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (
       this.props.cart !== prevProps.cart ||
@@ -59,7 +84,7 @@ class Nav extends Component {
     }
   }
 
-  // Toggle the cart overlay
+  // Toggle cart overlay
   handleToggleCart() {
     this.props.toggleCartOverlay();
   }
@@ -68,7 +93,7 @@ class Nav extends Component {
   filterResults = (categoryItem) => {
     const filteredProduct = this.props.data.categories
       ?.slice(0, 1)
-      .map((item, index) => {
+      .map((item) => {
         return item.products?.filter((product) => {
           return product.category === categoryItem;
         });
@@ -77,14 +102,12 @@ class Nav extends Component {
   };
 
   filterAllResults = () => {
-    const clothes = this.props.data.categories
-      ?.slice(0, 1)
-      .map((item, index) => {
-        return item.products?.filter((product) => {
-          return product.category === "clothes";
-        });
+    const clothes = this.props.data.categories?.slice(0, 1).map((item) => {
+      return item.products?.filter((product) => {
+        return product.category === "clothes";
       });
-    const tech = this.props.data.categories?.slice(0, 1).map((item, index) => {
+    });
+    const tech = this.props.data.categories?.slice(0, 1).map((item) => {
       return item.products?.filter((product) => {
         return product.category === "tech";
       });
@@ -94,33 +117,42 @@ class Nav extends Component {
   };
 
   render() {
+    const { cartOverlayOpen, currencyData } = this.props;
     return (
       <Container>
         <LinkItems>
-          <LinkItem>
-            <Link to="/" onClick={() => this.filterAllResults()}>
-              All
-            </Link>
+          <LinkItem to="/" onClick={() => this.filterAllResults()}>
+            All
           </LinkItem>
-          <LinkItem onClick={() => this.filterResults("tech")}>
-            <Link to="/">Tech</Link>
+          <LinkItem to="/" onClick={() => this.filterResults("tech")}>
+            Tech
           </LinkItem>
-          <LinkItem onClick={() => this.filterResults("clothes")}>
-            <Link to="/">Clothes</Link>
+          <LinkItem to="/" onClick={() => this.filterResults("clothes")}>
+            Clothes
           </LinkItem>
         </LinkItems>
         <LogoContainer to="/" onClick={() => this.filterAllResults()}>
           <img src={Logo} alt="Ecommerce Logo" />
         </LogoContainer>
-
         <CartWrapper>
-          <CurrencySymbol>currency</CurrencySymbol>
+          <CurrencySymbol>
+            <Select>
+              {currencyData.currencies?.map((item, index) => {
+                return (
+                  <option key={index} value={item.symbol}>
+                    {item.symbol}
+                    {item.label}
+                  </option>
+                );
+              })}
+            </Select>
+          </CurrencySymbol>
           <CartIcon>
             <BasketWrapper onClick={this.handleToggleCart}>
               <BasketIcon />
               <span>{this.state.cartCount}</span>
             </BasketWrapper>
-            {this.props.cartOverlayOpen && <CartOverlay />}
+            {cartOverlayOpen && <CartOverlay />}
           </CartIcon>
         </CartWrapper>
       </Container>
@@ -133,6 +165,7 @@ const mapStateToProps = (state) => {
     cartOverlayOpen: state.shop.cartOverlayOpen,
     cart: state.shop.cart,
     data: state.shop.data,
+    currencyData: state.shop.currencyData,
     filteredProducts: state.shop.filteredProducts,
   };
 };
@@ -142,6 +175,7 @@ const mapDispatchToProps = (dispatch) => {
     toggleCartOverlay: () => dispatch(toggleCartOverlay()),
     fetchfilteredProducts: (someProducts) =>
       dispatch(fetchfilteredProducts(someProducts)),
+    fetchCurrencies: (data) => dispatch(fetchCurrencies(data)),
   };
 };
 

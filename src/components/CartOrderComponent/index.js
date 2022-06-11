@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import {
   Container,
   Tax,
@@ -13,7 +13,7 @@ import {
 
 import { connect } from "react-redux";
 
-class CartOrderComponent extends Component {
+class CartOrderComponent extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -21,7 +21,7 @@ class CartOrderComponent extends Component {
       totalItems: 0,
       totalPrice: 0,
     };
-
+    
     this.handleTotals = this.handleTotals.bind(this);
   }
 
@@ -44,22 +44,23 @@ class CartOrderComponent extends Component {
     this.handleTotals();
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (
-  //     this.props.cart !== prevProps.cart ||
-  //     this.state.totalItems !== prevState.totalItems ||
-  //     this.state.totalPrice !== prevState.totalPrice
-  //   ) {
-  //     this.handleTotals();
-  //   }
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.props.cart !== prevProps.cart ||
+      this.state.totalItems !== prevState.totalItems ||
+      this.state.totalPrice !== prevState.totalPrice
+    ) {
+      this.handleTotals();
+    }
+  }
 
   render() {
     const { totalItems, totalPrice } = this.state;
     return (
       <Container>
         <Tax>
-          <Title>Tax 21%:</Title> <TotalTax>$40</TotalTax>
+          <Title>Tax 21%:</Title>{" "}
+          <TotalTax>${(totalPrice * 0.21).toFixed(2)}</TotalTax>
         </Tax>
         <Quantity>
           <Title>Quantity:</Title> <Value>{totalItems}</Value>

@@ -1,18 +1,21 @@
 import styled from "styled-components";
+import { mobile } from "../../responsive";
+import { tablet } from "../../responsive";
 
-// STYLED COMPONENTS
 export const PDPContainer = styled.div`
-  padding-top:60px;
+  padding-top: 60px;
   margin: auto;
 `;
 export const Container = styled.div`
   display: grid;
   grid-template-columns: 2fr 5fr 5fr;
+  ${tablet({ gridTemplateColumns: "1fr" })}
 `;
 export const LeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  ${tablet({ flexDirection: "row", flexWrap: "wrap" })}
 `;
 export const ProductImage = styled.img`
   width: auto;
@@ -20,10 +23,33 @@ export const ProductImage = styled.img`
   object-fit: contain;
   margin-bottom: 8px;
   cursor: pointer;
+  transition: all 0.5s ease;
+  ${tablet({ marginRight: "5%" })}
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
-export const MiddleContainer = styled.div``;
+export const MiddleContainer = styled.div`
+  position: relative;
+  max-height: 600px;
+`;
 export const MainImage = styled.img`
   width: 100%;
+  opacity: ${({ opacity }) => (opacity ? 1 : 0.5)};
+  z-index: 1;
+  ${tablet({ width: "90%", margin: "auto" })}
+`;
+export const InStock = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 44.24%;
+  transform: translate(-50%, -50%);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 38px;
+  color: #8d8f9a;
+  z-index: 100;
 `;
 export const RightContainer = styled.div`
   padding: 0px 30px 20px 5vw;
@@ -37,6 +63,7 @@ export const Brand = styled.h2`
   line-height: 27px;
   color: #1d1f22;
   margin-top: 0px;
+  ${mobile({ fontSize: "24px" })}
 `;
 export const Name = styled(Brand)`
   font-weight: 400;
@@ -48,6 +75,7 @@ export const AttributeName = styled.div`
   line-height: 18px;
   color: #1d1f22;
   margin: 18px 0px 10px;
+  ${mobile({ fontSize: "16px" })}
 `;
 export const AttributeWrap = styled.div`
   width: auto;
@@ -63,10 +91,12 @@ export const AttributeValue = styled.div`
   justify-content: center;
   align-items: center;
   background: ${(props) => props.bg};
+  user-select: none;
 
   &:active {
     transform: translateY(1.3px);
   }
+  ${mobile({ padding: "17px", marginRight: "8px" })}
 `;
 export const Price = styled.div``;
 export const PriceLabel = styled(AttributeName)``;
@@ -86,7 +116,7 @@ export const Button = styled.button`
   height: 52px;
   background: #5ece7b;
   color: #fff;
-  cursor: pointer;
+  cursor: ${({ cursor }) => (cursor ? "pointer" : "not-allowed")};
 
   &:active {
     transform: translateY(2px);

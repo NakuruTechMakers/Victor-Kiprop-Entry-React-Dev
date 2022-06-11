@@ -1,10 +1,14 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import "./App.css";
 import ProductsList from "./components/ProductsList";
 import Nav from "./components/Nav";
 import PDP from "./components/PDP";
 import Cart from "./components/Cart";
 import styled from "styled-components";
+
+import { connect } from "react-redux";
+import { fetchProducts } from "./redux/shopping/shopping-actions";
+import { fetchfilteredProducts } from "./redux/shopping/shopping-actions";
 
 // Routing
 import {
@@ -14,14 +18,9 @@ import {
   Navigate,
 } from "react-router-dom";
 
-// Query
+// Grapghql
 import gql from "graphql-tag";
 import { apolloClient } from "./index";
-
-//BRINGING IN STATE
-import { connect } from "react-redux";
-import { fetchProducts } from "./redux/shopping/shopping-actions";
-import { fetchfilteredProducts } from "./redux/shopping/shopping-actions";
 
 // OUR QUERY
 const GET_PRODUCTS = gql`
@@ -60,10 +59,10 @@ const GET_PRODUCTS = gql`
 const Container = styled.div`
   max-width: 1400px;
   margin: auto;
-  padding:0px 20px;
+  padding: 0px 20px;
 `;
 
-class App extends Component {
+class App extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -86,12 +85,12 @@ class App extends Component {
   };
 
   filterAllResults(data) {
-    const clothes = data.categories?.slice(0, 1).map((item, index) => {
+    const clothes = data.categories?.slice(0, 1).map((item) => {
       return item.products?.filter((product) => {
         return product.category === "clothes";
       });
     });
-    const tech = data.categories?.slice(0, 1).map((item, index) => {
+    const tech = data.categories?.slice(0, 1).map((item) => {
       return item.products?.filter((product) => {
         return product.category === "tech";
       });

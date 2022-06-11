@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Interweave } from "interweave";
 import {
   PDPContainer,
@@ -7,6 +7,7 @@ import {
   ProductImage,
   MiddleContainer,
   MainImage,
+  InStock,
   RightContainer,
   Brand,
   Name,
@@ -20,11 +21,10 @@ import {
   Desc,
 } from "./PdpStyles";
 
-//BRINGING IN STATE
 import { connect } from "react-redux";
 import { addToCart } from "../../redux/shopping/shopping-actions";
 
-class PDP extends Component {
+class PDP extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -65,13 +65,18 @@ class PDP extends Component {
             })}
           </LeftContainer>
           <MiddleContainer>
-            <MainImage src={currentItem.gallery[active]} alt="main image" />
+            <MainImage
+              src={currentItem.gallery[active]}
+              alt="main image"
+              opacity={currentItem.inStock}
+            />
+            {currentItem.inStock ? " " : <InStock>OUT OF STOCK</InStock>}
           </MiddleContainer>
           <RightContainer>
             <Brand>{currentItem.brand}</Brand>
             <Name>{currentItem.name}</Name>
 
-            {currentItem.attributes?.map((item, index) =>
+            {currentItem.attributes?.map((item) =>
               item ? (
                 <React.Fragment key={item.id}>
                   <AttributeName>{item.name}</AttributeName>
@@ -95,15 +100,29 @@ class PDP extends Component {
                 {currentItem.prices[0].amount}
               </Amount>
             </Price>
-            <Button onClick={() => addToCart(currentItem.id)}>
-              ADD TO CART
-            </Button>
+            {currentItem.inStock ? (
+              <Button
+                cursor={currentItem.inStock}
+                onClick={() => addToCart(currentItem.id)}
+              >
+                ADD TO CART
+              </Button>
+            ) : (
+              <Button
+                cursor={currentItem.inStock}
+                disabled
+                onClick={() => addToCart(currentItem.id)}
+              >
+                ADD TO CART
+              </Button>
+            )}
+
             <Desc>
               <Interweave content={currentItem.description} />
             </Desc>
           </RightContainer>
         </Container>
-      </PDPContainer> 
+      </PDPContainer>
     );
   }
 }

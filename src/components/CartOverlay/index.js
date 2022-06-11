@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import CartOverlayItems from "../CartOverlayItems";
 import CartTotals from "../CartTotals";
 import { Container, Title } from "./CartOverlayStyles";
 
 import { connect } from "react-redux";
 
-class CartOverlay extends Component {
+class CartOverlay extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -48,7 +48,7 @@ class CartOverlay extends Component {
         {cart.map((item) => (
           <CartOverlayItems key={item.id} itemData={item}/>
         ))}
-        <CartTotals />
+        <CartTotals cartCount={this.state.cartCount}/>
       </Container>
     );
   }

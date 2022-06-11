@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mobile } from "../../responsive";
 
 export const Container = styled.div`
   width: 400px;
@@ -9,6 +10,7 @@ export const Container = styled.div`
   position: absolute;
   right: 0;
   z-index: 99;
+  ${mobile({ padding: "0px 20px" })}
 `;
 export const Title = styled.h1`
   font-weight: 700;

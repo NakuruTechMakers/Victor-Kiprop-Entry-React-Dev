@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { mobile } from "../../responsive";
 
 export const Container = styled.div``;
 export const TotalsWrapper = styled.div`
@@ -30,6 +31,8 @@ export const ViewBagBtn = styled(Link)`
   text-decoration: none;
   border: 1px solid rgba(0, 0, 0, 0.5);
   color: #1d1f22;
+  text-align: center;
+  ${mobile({ padding: "10px 14px" })};
 `;
 export const CheckoutBtn = styled(ViewBagBtn)`
   background: #5ece7b;

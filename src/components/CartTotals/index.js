@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import {
   Container,
   TotalsWrapper,
@@ -12,7 +12,7 @@ import {
 import { connect } from "react-redux";
 import { toggleCartOverlay } from "../../redux/shopping/shopping-actions";
 
-class CartTotals extends Component {
+class CartTotals extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,7 +68,9 @@ class CartTotals extends Component {
           <ViewBagBtn to="/cart" onClick={this.handleToggleCart}>
             View Bag
           </ViewBagBtn>
-          <CheckoutBtn to="#" onClick={this.handleToggleCart}>Checkout</CheckoutBtn>
+          <CheckoutBtn to="#" onClick={this.handleToggleCart}>
+            Checkout
+          </CheckoutBtn>
         </ButtonsWrapper>
       </Container>
     );

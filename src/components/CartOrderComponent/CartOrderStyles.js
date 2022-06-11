@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mobile } from "../../responsive";
 
 export const Container = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.08);
@@ -13,6 +14,7 @@ export const Title = styled.div`
   line-height: 28px;
   color: #1d1f22;
   margin: 0px;
+  ${mobile({ fontSize: "20px" })}
 `;
 export const TotalTax = styled.p`
   display: inline-block;
@@ -21,6 +23,7 @@ export const TotalTax = styled.p`
   line-height: 24px;
   color: #1d1f22;
   margin: 10px;
+  ${mobile({ fontSize: "20px" })}
 `;
 export const Quantity = styled(Title)``;
 export const Value = styled(TotalTax)``;
